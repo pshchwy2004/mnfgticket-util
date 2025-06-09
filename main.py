@@ -27,7 +27,6 @@ def init():
             cp = int(f.readline().strip())
             tag = f.readline().strip()
             globals.service_list.append(Service(id, name, np, cp, tag))
-            print("Added", name)
     print("All services loaded.")
     print("Opening window...")
     

@@ -16,6 +16,8 @@ class Price_Calculator:
             self.index_to_service[index] = service
         self.calc_button = tk.Button(self.cwin, text = "Calculate Prices", font = ('Arial', 12), command = self.calculate_stuff_func)
         self.calc_button.pack()
+        self.calc_closebutton = tk.Button(self.cwin, text = "Close", font = ('Arial', 12), command = self.cwin.destroy)
+        self.calc_closebutton.pack()
         self.cwin.mainloop()
     def service_lookup(self, name):
         for service in globals.service_list:
