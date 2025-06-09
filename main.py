@@ -31,7 +31,9 @@ def init():
 def exit_app():
     root.destroy()
     
-
+def calc_window():
+    pc = Price_Calculator(service_list)
+    
 
 init()
 root = tk.Tk()
@@ -44,7 +46,7 @@ sm_button = tk.Button(button_frame, text = "Service Management", font = ('Arial'
 sm_button.pack(padx = 5)
 tm_button = tk.Button(button_frame, text = "Ticket Management", font = ('Arial', 12))
 tm_button.pack(padx = 5)
-cl_button = tk.Button(button_frame, text = "Price Calculations", font = ('Arial', 12))
+cl_button = tk.Button(button_frame, text = "Price Calculations", font = ('Arial', 12), command = calc_window)
 cl_button.pack(padx = 5)
 ex_button = tk.Button(button_frame, text = "Exit", font = ('Arial', 12), command = exit_app)
 ex_button.pack(padx = 5)
