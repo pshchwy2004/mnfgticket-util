@@ -3,8 +3,9 @@ import tkinter as tk
 from pathlib import *
 import sys
 from calc import Price_Calculator
+import globals
 
-service_list = []
+
 
 def init():
     print("Initializing")
@@ -25,15 +26,19 @@ def init():
             np = int(f.readline().strip())
             cp = int(f.readline().strip())
             tag = f.readline().strip()
-            service_list.append(Service(id, name, np, cp, tag))
+            globals.service_list.append(Service(id, name, np, cp, tag))
             print("Added", name)
+    print("All services loaded.")
+    print("Opening window...")
     
 def exit_app():
     root.destroy()
     
 def calc_window():
-    pc = Price_Calculator(service_list)
-    
+    pc = Price_Calculator()
+
+def sm_window():
+    sm = Service_Manager()
 
 init()
 root = tk.Tk()
@@ -42,7 +47,7 @@ root.title("Service Management Utility")
 button_frame = tk.Frame(root)
 button_frame.pack(side = 'left')
 
-sm_button = tk.Button(button_frame, text = "Service Management", font = ('Arial', 12))
+sm_button = tk.Button(button_frame, text = "Service Management", font = ('Arial', 12), command = sm_window)
 sm_button.pack(padx = 5)
 tm_button = tk.Button(button_frame, text = "Ticket Management", font = ('Arial', 12))
 tm_button.pack(padx = 5)

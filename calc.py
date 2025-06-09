@@ -1,43 +1,43 @@
 import tkinter as tk
-import service
+from tkinter import messagebox
+from service import *
+import globals
 
 class Price_Calculator:
-    def __init__(self, service_list):
-        self.slist = service_list
+    def __init__(self):
         self.cwin = tk.Tk()
         self.cwin.geometry("800x500")
         self.cwin.title("Price Calculator")
         self.calc_lb = tk.Listbox(self.cwin, selectmode = "multiple")
         self.calc_lb.pack(expand = True, fill = "both")
-        for service in service_list:
-            self.calc_lb.insert(tk.END, service.name)
-            
-        self.calc_button = tk.Button(self.cwin, text = "Ticket Management", font = ('Arial', 12), command = self.calculate_stuff_func)
+        self.index_to_service = {}
+        for index, service in enumerate(globals.service_list):
+            self.calc_lb.insert(tk.END, str(service))
+            self.index_to_service[index] = service
+        self.calc_button = tk.Button(self.cwin, text = "Calculate Prices", font = ('Arial', 12), command = self.calculate_stuff_func)
         self.calc_button.pack()
         self.cwin.mainloop()
     def service_lookup(self, name):
-        for service in self.slist:
+        for service in globals.service_list:
             if (name == service.name):
                 return service
-        return service.Service("invalid", "invalid service", 0, 0, "invalid")
+        return Service("invalid", "invalid service", 0, 0, "invalid")
     def calculate_stuff_func(self):
-        list = self.calc_lb.get(0)
-        camt = self.calculate_stuff(list, True)
-        namt = self.calculate_stuff(list, False)
-        msg = "Cash Price: " + camt + "\nStandard Price: " + namt
+        selected_s_i = self.calc_lb.curselection()
+        selected_s = [self.index_to_service[i] for i in selected_s_i]
+        
+        namt, camt = self.calculate_stuff(selected_s)
+        msg = "Cash Price: " + str(camt) + "\nStandard Price: " + str(namt)
         tk.messagebox.showinfo(
             title="Calculated Amount",
-            # Get the text of each selected item and
-            # show them separated by commas.
             message = msg
         )
         
-    def calculate_stuff(self, sussylist, cash):
-        amt = 0
-        for service_name in sussylist:
-            if (cash == True):
-                amt += (self.service_lookup(service_name)).c
-            else:
-                amt += (self.service_lookup(service_name)).n
-        return amt
+    def calculate_stuff(self, sussylist):
+        namt = 0
+        camt = 0
+        for service in sussylist:
+            camt += service.c
+            namt += service.n
+        return namt, camt
     
