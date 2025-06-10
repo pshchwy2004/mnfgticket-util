@@ -35,7 +35,7 @@ class Price_Calculator:
         self.update_serv_list()
         
         # Selected Listbox
-        self.selected_lb = tk.Listbox(self.cwin, selectmode = 'multiple')
+        self.selected_lb = tk.Listbox(self.cwin, selectmode = 'multiple', width = 30)
         self.selected_lb.pack(expand = True, side = 'right', padx = 5, pady = 10, fill = 'y')
         
         # Buttons
@@ -57,7 +57,7 @@ class Price_Calculator:
         search_term = self.search_entry.get()
         self.servbox_lb.delete(0, tk.END)
         for service in globals.service_list:
-            if search_term.lower() in str(service).lower():
+            if (search_term.lower() in (service.tags.lower())) | (search_term.lower() in service.name):
                 self.servbox_lb.insert(tk.END, str(service))
            
     

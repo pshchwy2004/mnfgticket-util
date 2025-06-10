@@ -17,6 +17,10 @@ class Ticket:
     def __init__(self, techs, services):
         self.tech_list = techs
         self.services = services
+        
+    def __str__(self):
+        return "Tech(s): " + ",".join(self.tech_list) + ", Services: "
+        pass
     
     def add_to_services(self, service):
         self.services.append(service)
@@ -82,6 +86,7 @@ class Service_Manager:
         for index, service in enumerate(globals.service_list):
             self.smlb.insert(tk.END, str(service))
             self.index_to_service[index] = service
+
     def addser_window(self):
         self.aswin = tk.Tk()
         self.aswin.title("Add Service")
