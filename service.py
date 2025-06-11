@@ -32,8 +32,8 @@ class Ticket:
                 break
     
 class Service_Manager:
-    def __init__(self):
-        self.smwin = tk.Tk()
+    def __init__(self, master):
+        self.smwin = tk.Toplevel(master)
         self.smwin.geometry("800x500")
         self.smwin.title("Service Manager")
         self.smlb = tk.Listbox(self.smwin, selectmode = "multiple")
@@ -46,7 +46,6 @@ class Service_Manager:
         self.remserbutton.pack()
         self.closesmbutton = tk.Button(self.smwin, text = "Close", font = ('Arial', 12), command = self.smwin.destroy)
         self.closesmbutton.pack()
-        self.smwin.mainloop()
         
     def remove_services(self):
         selected_s_i = self.smlb.curselection()
@@ -88,7 +87,7 @@ class Service_Manager:
             self.index_to_service[index] = service
 
     def addser_window(self):
-        self.aswin = tk.Tk()
+        self.aswin = tk.Toplevel(self.smwin)
         self.aswin.title("Add Service")
         self.asidl = tk.Label(self.aswin, text = "ID")
         self.asidl.pack()

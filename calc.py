@@ -4,12 +4,12 @@ from service import *
 import globals
 
 class Price_Calculator:
-    def __init__(self):
+    def __init__(self, master):
         # Price Index- to be updated upon add or removal
         self.cp = 0
         self.np = 0
         # Window Creation
-        self.cwin = tk.Tk()
+        self.cwin = tk.Toplevel(master)
         self.cwin.geometry("800x500")
         self.cwin.title("Price Calculator")
         
@@ -22,6 +22,7 @@ class Price_Calculator:
         self.search_entry.pack()
         self.search_entry.focus()
         self.search_entry.bind("<Return>", self.update_serv_list)
+        self.search_var.trace_add('write', self.update_serv_list)
        
         
         # Button to manually initiate search since this stupid search bar won't work and no AI is willing nor able to help me

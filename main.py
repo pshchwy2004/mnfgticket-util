@@ -3,6 +3,7 @@ import tkinter as tk
 from pathlib import *
 import sys
 from calc import Price_Calculator
+from ticket_manager import Ticket_Manager
 import globals
 
 
@@ -33,11 +34,7 @@ def init():
 def exit_app():
     root.destroy()
     
-def calc_window():
-    pc = Price_Calculator()
 
-def sm_window():
-    sm = Service_Manager()
 
 init()
 root = tk.Tk()
@@ -46,9 +43,20 @@ root.title("Service Management Utility")
 button_frame = tk.Frame(root)
 button_frame.pack(side = 'left')
 
+# Toplevel defs
+
+def calc_window():
+    pc = Price_Calculator(root)
+
+def sm_window():
+    sm = Service_Manager(root)
+    
+def tm_window():
+    tm = Ticket_Manager(root)
+
 sm_button = tk.Button(button_frame, text = "Service Management", font = ('Arial', 12), command = sm_window)
 sm_button.pack(padx = 5)
-tm_button = tk.Button(button_frame, text = "Ticket Management", font = ('Arial', 12))
+tm_button = tk.Button(button_frame, text = "Ticket Management", font = ('Arial', 12), command = tm_window)
 tm_button.pack(padx = 5)
 cl_button = tk.Button(button_frame, text = "Price Calculations", font = ('Arial', 12), command = calc_window)
 cl_button.pack(padx = 5)
