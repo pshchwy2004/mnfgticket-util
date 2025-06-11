@@ -3,10 +3,12 @@ import tkinter as tk
 
 class Ticket_Manager:
     def __init__(self, master):
+        # Setting up toplevel
         self.tmwin = tk.Toplevel(master)
-        self.ticket_search_var = tk.StringVar()
-        self.ticket_search_entry = tk.Entry(self.tmwin, textvariable = self.ticket_search_var)
-        self.ticket_search_entry.pack()
-        self.ticket_search_var.trace_add('write', print("hi"))
+        self.tmwin.title("Ticket Manager")
+        
+        self.ticket_lb = tk.Listbox(self.tmwin)
+        self.ticket_lb.pack(fill = "x")
+        
 
     
