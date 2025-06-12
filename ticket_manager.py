@@ -42,7 +42,7 @@ class Ticket_Manager:
         self.tech_name_entry = tk.Entry(self.atwin)
         self.tech_name_entry.pack()
         self.tech_name_entry.focus()
-        # Services Performed
+        # Available Services
         self.servframe = tk.Frame(self.atwin)
         self.servframe.pack()
         # Search Bar- place before Service Listbox to place above it
@@ -60,6 +60,12 @@ class Ticket_Manager:
         self.servbox_lb.grid(row = 1, column = 0)
         # To update the Servbox
         update_serv_list()
+        
+        # Selected Services
+        self.selectedframe = tk.Listbox(self.servframe, selectmode = 'single', width = 30)
+        self.selectedframe.grid(row = 1, column = 1)
+        
+        
         
 
     
