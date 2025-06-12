@@ -14,8 +14,8 @@ class Service:
         return self.name
         
 class Ticket:
-    def __init__(self, techs, services, open=True):
-        self.tech_list = techs
+    def __init__(self, tech, services, open=True):
+        self.tech = tech
         self.services = services
         self.open = open
         
@@ -31,6 +31,14 @@ class Ticket:
             if (service.name == service_name):
                 self.services.remove(service)
                 break
+    
+    def calculate_prices(self):
+        np = 0
+        cp = 0
+        for service in self.services:
+            np += service.n
+            cp += service.c
+        return np, cp
     
 class Service_Manager:
     def __init__(self, master):
