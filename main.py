@@ -47,12 +47,13 @@ def init():
         with file.open('r') as f:
             id = globals.ticket_id_counter
             tech = f.readline().strip()
+            customer = f.readline().strip()
             open = bool(f.readline().strip())
             t_services = []
             for line in file:
                 serv = service_lookup_by_id(line.strip())
                 t_services.append(serv)
-            globals.ticket_list.append(Ticket(id, tech, open, t_services))
+            globals.ticket_list.append(Ticket(id, tech, open, t_services, customer))
         globals.ticket_id_counter = globals.ticket_id_counter + 1
     print("All tickets loaded.")
     print("Opening window...")

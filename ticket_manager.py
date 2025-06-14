@@ -11,6 +11,8 @@ class Ticket_Manager:
         
         # Tickets
         self.ticket_lb = tk.Listbox(self.tmwin, selectmode = "single")
+        
+        self.refresh_tickets()
         self.ticket_lb.pack(fill = "x")
         for ticket in globals.ticket_list:
             self.ticket_lb.insert(tk.END, str(ticket))
@@ -27,6 +29,11 @@ class Ticket_Manager:
         self.close_button = tk.Button(self.tmwin, text = "Close", font = ('Arial', 12), command = self.tmwin.destroy)
         self.close_button.pack()
         
+    def refresh_tickets(self):
+        self.ticket_lb.delete(0, tk.END)
+        for ticket in enumerate(globals.ticket_list):
+            self.ticket_lb.insert(tk.END, str(ticket))
+        
     def addtick_window(self):
         def update_serv_list(*args):
             search_term = self.search_entry.get()
@@ -34,6 +41,7 @@ class Ticket_Manager:
             for service in globals.service_list:
                 if (search_term.lower() in (service.tags.lower())) | (search_term.lower() in service.name):
                     self.servbox_lb.insert(tk.END, str(service))
+                    
         self.atwin = tk.Toplevel(self.tmwin)
         self.atwin.title("Add Ticket")
         # Technician Name
@@ -42,6 +50,14 @@ class Ticket_Manager:
         self.tech_name_entry = tk.Entry(self.atwin)
         self.tech_name_entry.pack()
         self.tech_name_entry.focus()
+        # Customer Name
+        self.customer_name_label = tk.Label(self.atwin, text = "Customer Name")
+        self.customer_name_label.pack()
+        self.customer_name_entry = tk.Entry(self.atwin)
+        self.customer_name_entry.pack()
+        # Open Checkbox
+        self.open_checkbox = tk.Checkbutton(self.atwin)
+        self.open_checkbox.pack()
         # Available Services
         self.servframe = tk.Frame(self.atwin)
         self.servframe.pack()
@@ -64,6 +80,40 @@ class Ticket_Manager:
         # Selected Services
         self.selectedframe = tk.Listbox(self.servframe, selectmode = 'single', width = 30)
         self.selectedframe.grid(row = 1, column = 1)
+        # Define Add Ticket Func
+        def add_ticket(*args):
+            try:
+                techname = self.tech_name_entry.get()
+                custname = self.customer_name_entry.get()
+                servlist = []
+                opn = self.open_checkbox.getboolean()
+                selected_s_i = self.servbox_lb.curselection()
+                for sindex in selected_s_i:
+                    sname = self.servbox_lb.get(sindex)
+                    service = globals.service_lookup(sname)
+                    servlist.append(service)
+                pass
+                try:
+                    with open(("tickets/" + globals.ticket_id_counter), 'x') as f:
+                        f.write(techname + "\n")
+                        f.write(custname + "\n")
+                        f.write(str(opn) + "\n")
+                        globals.service_list.append(Service(globals.ticket_id_counter, techname, servlist, opn, custname))
+                        self.refresh_tickets()
+                        
+                except FileExistsError:
+                    tk.messagebox.showerror(
+                        title="Error",
+                        message = "File already exists!"
+                    )
+            except ValueError:
+                tk.messagebox.showerror(
+                    title="Error: Invalid values provided",
+                    message = "get outta here"
+                )
+        # Add Ticket Button for Add Ticket Window
+        self.at_add_button = tk.Button(self.atwin, text = "Add Ticket")
+        self.at_add_button.pack()
         
         
         

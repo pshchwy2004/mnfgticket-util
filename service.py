@@ -14,15 +14,16 @@ class Service:
         return self.name
         
 class Ticket:
-    def __init__(self, tech, services, open=True, customer_name = ""):
+    def __init__(self, id, tech, services, open=True, customer_name = ""):
+        self.id = id
         self.tech = tech
         self.services = services
         self.open = open
         self.customer_name = customer_name
         
     def __str__(self):
-        return "Tech(s): " + ",".join(self.tech_list) + ", Customer: " + self.customer_name
-        pass
+        return f"{self.id : 04d}" + ": Technician: " + self.tech + ", Customer: " + self.customer_name
+        
     
     def add_to_services(self, service):
         self.services.append(service)

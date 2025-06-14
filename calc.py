@@ -78,19 +78,20 @@ class Price_Calculator:
         selected_s_i = self.servbox_lb.curselection()
         for sindex in selected_s_i:
             sname = self.servbox_lb.get(sindex)
-            service = self.service_lookup(sname)
+            service = globals.service_lookup(sname)
             if service != None:
                 self.np += service.n
                 self.cp += service.c
             self.selected_lb.insert(tk.END, sname)
         self.normpricelabel.config(text = "Normal Price: " + str(self.np))
         self.cashpricelabel.config(text = "Cash Price: " + str(self.cp))
+        self.search_entry.focus()
         
     def remove_from_selected(self, *args):
         selected_s_i = self.selected_lb.curselection()
         for sindex in selected_s_i:
             sname = self.selected_lb.get(sindex)
-            service = self.service_lookup(sname)
+            service = globals.service_lookup(sname)
             if service != None:
                 self.np -= service.n
                 self.cp -= service.c
@@ -98,6 +99,7 @@ class Price_Calculator:
             self.selected_lb.delete(sindex)
         self.normpricelabel.config(text = "Normal Price: " + str(self.np))
         self.cashpricelabel.config(text = "Cash Price: " + str(self.cp))
+        self.search_entry.focus()
     
     def clear_selected(self, *args):
         self.selected_lb.delete(0, tk.END)
@@ -105,10 +107,6 @@ class Price_Calculator:
         self.cp = 0
         self.normpricelabel.config(text = "Normal Price: " + str(self.np))
         self.cashpricelabel.config(text = "Cash Price: " + str(self.cp))
+        self.search_entry.focus()
         
-    # Looks up the service by name and returns the Service object instance and None if unable to lookup
-    def service_lookup(self, name):
-        for service in globals.service_list:
-            if (name == service.name):
-                return service
-        return None
+    
