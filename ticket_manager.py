@@ -56,8 +56,13 @@ class Ticket_Manager:
         self.customer_name_entry = tk.Entry(self.atwin)
         self.customer_name_entry.pack()
         # Open Checkbox
-        self.open_checkbox = tk.Checkbutton(self.atwin)
-        self.open_checkbox.pack()
+        self.open_frame = tk.Frame(self.atwin)
+        self.open_frame.pack()
+        self.open_label = tk.Label(self.open_frame, text = "Open?")
+        self.open_label.grid(row = 0, column = 0)
+        self.open_checkbox = tk.Checkbutton(self.open_frame)
+        self.open_checkbox.select()
+        self.open_checkbox.grid(row = 0, column = 1)
         # Available Services
         self.servframe = tk.Frame(self.atwin)
         self.servframe.pack()
@@ -71,6 +76,7 @@ class Ticket_Manager:
         self.search_entry.grid(row = 0, column = 1)
         self.search_entry.bind("<Return>", update_serv_list)
         self.search_var.trace_add('write', update_serv_list)
+        
         # Service Listbox (aka Servbox)
         self.servbox_lb = tk.Listbox(self.servframe, selectmode = 'single', width = 30)
         self.servbox_lb.grid(row = 1, column = 0)
@@ -80,6 +86,19 @@ class Ticket_Manager:
         # Selected Services
         self.selectedframe = tk.Listbox(self.servframe, selectmode = 'single', width = 30)
         self.selectedframe.grid(row = 1, column = 1)
+        # Service add function
+        def add_to_selected(self, *args):
+            selected_s_i = self.servbox_lb.curselection()
+            for sindex in selected_s_i:
+                sname = self.servbox_lb.get(sindex)
+                self.selectedframe.insert(tk.END, sname)
+            self.search_entry.focus()
+            
+        def remove_from_selected(self, *args):
+            selected_s_i = self.selected_lb.curselection()
+            for sindex in reversed(selected_s_i):
+                self.selectedframe.delete(sindex)
+            self.search_entry.focus()
         # Define Add Ticket Func
         def add_ticket(*args):
             try:
@@ -112,7 +131,7 @@ class Ticket_Manager:
                     message = "get outta here"
                 )
         # Add Ticket Button for Add Ticket Window
-        self.at_add_button = tk.Button(self.atwin, text = "Add Ticket")
+        self.at_add_button = tk.Button(self.atwin, text = "Add Ticket", command = add_ticket)
         self.at_add_button.pack()
         
         
