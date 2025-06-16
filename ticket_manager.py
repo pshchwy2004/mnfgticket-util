@@ -42,6 +42,8 @@ class Ticket_Manager:
                 if (search_term.lower() in (service.tags.lower())) | (search_term.lower() in service.name):
                     self.servbox_lb.insert(tk.END, str(service))
                     
+        
+                    
         self.atwin = tk.Toplevel(self.tmwin)
         self.atwin.title("Add Ticket")
         # Technician Name
@@ -60,7 +62,8 @@ class Ticket_Manager:
         self.open_frame.pack()
         self.open_label = tk.Label(self.open_frame, text = "Open?")
         self.open_label.grid(row = 0, column = 0)
-        self.open_checkbox = tk.Checkbutton(self.open_frame)
+        self.open_var = tk.BooleanVar(self.open_frame)
+        self.open_checkbox = tk.Checkbutton(self.open_frame, variable = self.open_var)
         self.open_checkbox.select()
         self.open_checkbox.grid(row = 0, column = 1)
         # Available Services
@@ -87,36 +90,51 @@ class Ticket_Manager:
         self.selectedframe = tk.Listbox(self.servframe, selectmode = 'single', width = 30)
         self.selectedframe.grid(row = 1, column = 1)
         # Service add function
-        def add_to_selected(self, *args):
+        def add_to_selected(*args):
             selected_s_i = self.servbox_lb.curselection()
             for sindex in selected_s_i:
                 sname = self.servbox_lb.get(sindex)
                 self.selectedframe.insert(tk.END, sname)
             self.search_entry.focus()
             
-        def remove_from_selected(self, *args):
-            selected_s_i = self.selected_lb.curselection()
+        def remove_from_selected(*args):
+            selected_s_i = self.selectedframe.curselection()
             for sindex in reversed(selected_s_i):
                 self.selectedframe.delete(sindex)
             self.search_entry.focus()
+        
+        def clear_selected(*args):
+            self.selectedframe.delete(0, tk.END)
+            
+        # Add To Selected Button
+        self.ats_add_button = tk.Button(self.servframe, text = "Add To Selected", command = add_to_selected)
+        self.ats_add_button.grid(row = 2, column = 0)
+        # Remove From Selected Button
+        self.ats_remove_button = tk.Button(self.servframe, text = "Remove From Selected", command = remove_from_selected)
+        self.ats_remove_button.grid(row = 2, column = 1)
+        # Clear Selected Button
+        self.ats_clr_button = tk.Button(self.servframe, text = "Clear Selected", command = clear_selected)
+        self.ats_clr_button.grid(row = 3, column = 1)
         # Define Add Ticket Func
         def add_ticket(*args):
             try:
                 techname = self.tech_name_entry.get()
                 custname = self.customer_name_entry.get()
                 servlist = []
-                opn = self.open_checkbox.getboolean()
-                selected_s_i = self.servbox_lb.curselection()
+                opn = self.open_var.get()
+                selected_s_i = self.selectedframe.curselection()
                 for sindex in selected_s_i:
-                    sname = self.servbox_lb.get(sindex)
+                    sname = self.selectedframe.get(sindex)
                     service = globals.service_lookup(sname)
                     servlist.append(service)
                 pass
                 try:
-                    with open(("tickets/" + globals.ticket_id_counter), 'x') as f:
+                    with open(("tickets/" + str(globals.ticket_id_counter)), 'x') as f:
                         f.write(techname + "\n")
                         f.write(custname + "\n")
                         f.write(str(opn) + "\n")
+                        for service in servlist:
+                            f.write(service.id + "\n")
                         globals.service_list.append(Service(globals.ticket_id_counter, techname, servlist, opn, custname))
                         self.refresh_tickets()
                         
