@@ -65,10 +65,12 @@ def exit_app():
 
 init()
 root = tk.Tk()
-root.geometry("800x500")
+root.configure(background = "white")
 root.title("Service Management Utility")
-button_frame = tk.Frame(root)
-button_frame.pack(side = 'left')
+label = tk.Label(root, text = "Welcome to the Service Management Utility", font = ('Arial', 18), background = "white")
+label.grid(row = 0, column = 0)
+button_frame = tk.Frame(root, background = "white")
+button_frame.grid(row = 3, column = 0)
 
 # Toplevel defs
 
@@ -81,14 +83,16 @@ def sm_window():
 def tm_window():
     tm = Ticket_Manager(root)
 
-sm_button = tk.Button(button_frame, text = "Service Management", font = ('Arial', 12), command = sm_window)
+sm_button = tk.Button(button_frame, text = "Service Management", font = ('Arial', 12), command = sm_window, background = "white")
 sm_button.pack(padx = 5)
+'''
 tm_button = tk.Button(button_frame, text = "Ticket Management", font = ('Arial', 12), command = tm_window)
 tm_button.pack(padx = 5)
-cl_button = tk.Button(button_frame, text = "Price Calculations", font = ('Arial', 12), command = calc_window)
+'''
+cl_button = tk.Button(button_frame, text = "Price Calculations", font = ('Arial', 12), command = calc_window, background = "white")
 cl_button.pack(padx = 5)
-ex_button = tk.Button(button_frame, text = "Exit", font = ('Arial', 12), command = exit_app)
+ex_button = tk.Button(button_frame, text = "Exit", font = ('Arial', 12), command = exit_app, background = "white")
 ex_button.pack(padx = 5)
-label = tk.Label(root, text = "choose a thing", font = ('Arial', 18))
-label.pack(side = 'top')
+
+
 root.mainloop()

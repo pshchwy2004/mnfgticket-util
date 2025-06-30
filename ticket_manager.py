@@ -1,4 +1,5 @@
 from service import *
+import tempfile
 import tkinter as tk
 
 
@@ -41,8 +42,6 @@ class Ticket_Manager:
             for service in globals.service_list:
                 if (search_term.lower() in (service.tags.lower())) | (search_term.lower() in service.name):
                     self.servbox_lb.insert(tk.END, str(service))
-                    
-        
                     
         self.atwin = tk.Toplevel(self.tmwin)
         self.atwin.title("Add Ticket")
@@ -87,24 +86,24 @@ class Ticket_Manager:
         update_serv_list()
         
         # Selected Services
-        self.selectedframe = tk.Listbox(self.servframe, selectmode = 'single', width = 30)
-        self.selectedframe.grid(row = 1, column = 1)
+        self.selected_lb = tk.Listbox(self.servframe, selectmode = 'single', width = 30)
+        self.selected_lb.grid(row = 1, column = 1)
         # Service add function
         def add_to_selected(*args):
             selected_s_i = self.servbox_lb.curselection()
             for sindex in selected_s_i:
                 sname = self.servbox_lb.get(sindex)
-                self.selectedframe.insert(tk.END, sname)
+                self.selected_lb.insert(tk.END, sname)
             self.search_entry.focus()
             
         def remove_from_selected(*args):
-            selected_s_i = self.selectedframe.curselection()
+            selected_s_i = self.selected_lb.curselection()
             for sindex in reversed(selected_s_i):
-                self.selectedframe.delete(sindex)
+                self.selected_lb.delete(sindex)
             self.search_entry.focus()
         
         def clear_selected(*args):
-            self.selectedframe.delete(0, tk.END)
+            self.selected_lb.delete(0, tk.END)
             
         # Add To Selected Button
         self.ats_add_button = tk.Button(self.servframe, text = "Add To Selected", command = add_to_selected)
@@ -122,12 +121,9 @@ class Ticket_Manager:
                 custname = self.customer_name_entry.get()
                 servlist = []
                 opn = self.open_var.get()
-                selected_s_i = self.selectedframe.curselection()
-                for sindex in selected_s_i:
-                    sname = self.selectedframe.get(sindex)
+                for sname in enumerate(self.selected_lb.get(0, tk.END)):
                     service = globals.service_lookup(sname)
                     servlist.append(service)
-                pass
                 try:
                     with open(("tickets/" + str(globals.ticket_id_counter)), 'x') as f:
                         f.write(techname + "\n")
@@ -137,6 +133,7 @@ class Ticket_Manager:
                             f.write(service.id + "\n")
                         globals.service_list.append(Service(globals.ticket_id_counter, techname, servlist, opn, custname))
                         self.refresh_tickets()
+                        self.atwin.destroy()
                         
                 except FileExistsError:
                     tk.messagebox.showerror(
